@@ -8,14 +8,14 @@ response = requests.get('https://dadosabertos.camara.leg.br/api/v2/votacoes', pa
 
 if response.status_code == 200:
     data = response.json()  
-    votacoes = data['dados']  
+    votacoes = data['dados']
     
     # Itera sobre as votações
     for votacao in votacoes:
         votacao_id = votacao['id']
         print(f'ID da votação: {votacao_id}')
         
-        votos_response = requests.get(f'https://dadosabertos.camara.leg.br/api/v2/votacoes/{votacao_id}/orientacoes')
+        votos_response = requests.get(f'https://dadosabertos.camara.leg.br/api/v2/votacoes/{votacao_id}/votos')
         
         if votos_response.status_code == 200:
             votos_data = votos_response.json()
