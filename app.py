@@ -10,7 +10,7 @@ def make_request(url):
 
 # Função para obter as informações de votos de uma votação específica
 def get_voting_details(voting_id):
-    url = f'https://dadosabertos.camara.leg.br/api/v2/votacoes/1555497-56/votos'
+    url = f'https://dadosabertos.camara.leg.br/api/v2/votacoes/{voting_id}/votos'
     data = make_request(url)
     if data:
         votes = data['dados']
