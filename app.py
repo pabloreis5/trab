@@ -1,35 +1,39 @@
 import requests
 
-params = {
-    'itens': 20  
-}
+# Função para fazer a requisição à API
+def make_request(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return None
 
-response = requests.get('https://dadosabertos.camara.leg.br/api/v2/votacoes', params=params)
-
-if response.status_code == 200:
-    data = response.json()  
-    votacoes = data['dados']
-    
-    # Itera sobre as votações
-    for votacao in votacoes:
-        votacao_id = votacao['id']
-        print(f'ID da votação: {votacao_id}')
-        
-        votos_response = requests.get(f'https://dadosabertos.camara.leg.br/api/v2/votacoes/{votacao_id}/votos')
-        
-        if votos_response.status_code == 200:
-            votos_data = votos_response.json()
-            votos = votos_data['dados']
-            print(votos)
-            
-            for voto in votos:
-                deputado_nome = voto['nome']
-                voto_votou = voto['voto']
-                
-                print(f'Deputado: {deputado_nome} - Voto: {voto_votou}')
-                
+# Função para obter as informações de votos de uma votação específica
+def get_voting_details(voting_id):
+    url = f'https://dadosabertos.camara.leg.br/api/v2/votacoes/1555497-56/votos'
+    data = make_request(url)
+    if data:
+        votes = data['dados']
+        for vote in votes:
+            if 'deputado_' in vote:
+                deputado = vote['deputado_']['nome']
+                print(f"Deputado: {deputado}")
+            else:
+                print("Informações do deputado não encontradas")
         else:
-            print('Erro ao obter os votos da votação.')
-        print('---')
-else:
-    print('Erro ao obter as votações.')
+            print("Votação não-nominal")
+    else:
+        print("Erro de requisição")
+
+# Função para obter todas as votações
+def get_all_votings():
+    url = 'https://dadosabertos.camara.leg.br/api/v2/votacoes'
+    data = make_request(url)
+    if data:
+        for votacao in data['dados']:
+            voting_id = votacao['id']
+            get_voting_details(voting_id)
+            print("##########")
+
+# Executa a função para obter todas as votações
+get_all_votings()
