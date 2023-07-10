@@ -17,11 +17,12 @@ def get_voting_details(voting_id):
         for vote in votes:
             if 'deputado_' in vote:
                 deputado = vote['deputado_']['nome']
-                print(f"Deputado: {deputado}")
+                tipoVoto = vote['tipoVoto']
+                print(f"Deputado: {deputado} | Seu Voto: {tipoVoto}")
             else:
                 print("Informações do deputado não encontradas")
         else:
-            print("Votação não-nominal")
+            print("null")
     else:
         print("Erro de requisição")
 
@@ -32,8 +33,9 @@ def get_all_votings():
     if data:
         for votacao in data['dados']:
             voting_id = votacao['id']
+            print('\n'+ voting_id)
             get_voting_details(voting_id)
-            print("##########")
+            
 
 # Executa a função para obter todas as votações
 get_all_votings()
